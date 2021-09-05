@@ -71,6 +71,18 @@ struct MainView: View {
     }
 }
 
+
+
+struct Human: Identifiable, Decodable {
+    
+    var id: String
+    var name: String
+    var age: Int
+    var birthplace: String
+    
+    
+}
+
 struct ContentView_Previews: PreviewProvider {
     static var previews: some View {
         ContentView()
