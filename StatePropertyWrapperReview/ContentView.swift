@@ -12,28 +12,34 @@ struct ContentView: View {
     @StateObject var viewModel = ViewModel()
     @State var isPresented = false
     
+    @State var username = "Sam"
+    
     var body: some View {
-        VStack {
-            Text("Hello")
-                .padding()
-            NameView(viewModel: viewModel)
-            
-            
-            Button(action: {
-                viewModel.changeName()
-                isPresented.toggle()
-                
-            }, label: {
-                Text("Button")
-                    .background(Color.blue)
-                    .foregroundColor(.white)
-            })
+        NavigationView {
+            VStack {
+                NavigationLink(
+                    destination: ProfileView(username: $username),
+                    label: {
+                        Text(username)
+                    })
+            }
         }
-        .sheet(isPresented: $isPresented, content: {
-            MainView()
-        })
     }
 }
+
+struct ProfileView: View {
+    
+    @Binding var username: String
+    
+    var body: some View {
+        
+        TextField(username, text: $username)
+        
+        Text(username)
+        
+    }
+}
+
 
 struct NameView: View {
     
@@ -55,7 +61,7 @@ struct MainView: View {
         VStack {
             Button(action: {
                 mode.wrappedValue.dismiss()
- 
+                
             }, label: {
                 Text("Cancel")
             })
