@@ -9,37 +9,60 @@ import SwiftUI
 
 struct ContentView: View {
     
-    @State var name = "Adam"
+    @StateObject var viewModel = ViewModel()
+    @State var isPresented = false
     
     var body: some View {
         VStack {
             Text("Hello")
                 .padding()
-            NameView(name: name)
-
-        
-        Button(action: {
-            name = "Sam"
+            NameView(viewModel: viewModel)
             
-        }, label: {
-            Text("Button")
-            .background(Color.blue)
-                .foregroundColor(.white)
-        })
+            
+            Button(action: {
+                viewModel.changeName()
+                isPresented.toggle()
+                
+            }, label: {
+                Text("Button")
+                    .background(Color.blue)
+                    .foregroundColor(.white)
+            })
         }
+        .sheet(isPresented: $isPresented, content: {
+            MainView()
+        })
     }
 }
 
 struct NameView: View {
     
-    let name: String
+    @ObservedObject var viewModel: ViewModel
+    
     
     var body: some View {
-        Text(name)
+        Text(viewModel.name)
             .padding()
-
+        
     }
+}
+
+struct MainView: View {
     
+    @Environment(\.presentationMode) var mode
+    
+    var body: some View {
+        VStack {
+            Button(action: {
+                mode.wrappedValue.dismiss()
+ 
+            }, label: {
+                Text("Cancel")
+            })
+            RoundedRectangle(cornerRadius: 10.0)
+                .frame(width: 100, height: 100)
+        }
+    }
 }
 
 struct ContentView_Previews: PreviewProvider {
